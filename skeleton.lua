@@ -78,8 +78,9 @@ function init()
   clock.run(function()
     engine.load_tape(1,"/home/we/dust/audio/windchimes.wav")
     clock.sleep(0.2)
+    local rates={1,1,1,1,0.5,0.5,0.25,2,0.125}
     for i=1,total_num do
-      engine.play_tape(1,i,1,0,1)
+      engine.play_tape(1,i,rates[math.random(#rates)],0,1)
     end
   end)
 

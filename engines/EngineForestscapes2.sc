@@ -136,7 +136,7 @@ Engine_Forestscapes2 : CroneEngine {
 			// add some nice tape compression
 			snd = AnalogTape.ar(snd,0.9,0.8,0.9,2);
 			// add some reverb
-			snd=SelectX.ar(LFNoise2.kr(1/3).range(0.1,0.5),[
+			snd=SelectX.ar(LFNoise2.kr(1/3).range(0.3,0.6),[
 				snd,
 				Fverb.ar(snd[0],snd[1],50,decay:LFNoise2.kr(1/3).range(70,90))
 			]);
