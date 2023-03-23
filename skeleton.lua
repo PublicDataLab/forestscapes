@@ -1,8 +1,18 @@
 -- skeleton
 musicutil=require("musicutil")
+player_=include("lib/player")
+engine.name="Forestscapes2"
+
+total_num=6
+player={}
 
 function init()
   os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
+
+  player={}
+  for i=1,total_num do
+    table.insert(player,player_:new{id=i})
+  end
 
   local params_menu={
     {id="volume",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
@@ -31,6 +41,21 @@ function init()
       print("file edited ok!")
       rerun()
     end,
+    position=function(args)
+      player[tonumber(args[1])].pos_current=tonumber(args[2])
+    end,
+    posStart=function(args)
+      player[tonumber(args[1])].pos_start=tonumber(args[2])
+    end,
+    posEnd=function(args)
+      player[tonumber(args[1])].pos_end=tonumber(args[2])
+    end,
+    volume=function(args)
+      player[tonumber(args[1])].volume=tonumber(args[2])
+    end,
+    pan=function(args)
+      player[tonumber(args[1])].pan=tonumber(args[2])
+    end,
   }
   osc.event=function(path,args,from)
     if string.sub(path,1,1)=="/" then
@@ -47,6 +72,14 @@ function init()
       debounce_params()
       clock.sleep(1/15)
       redraw()
+    end
+  end)
+
+  clock.run(function()
+    engine.load_tape(1,"/home/we/dust/audio/windchimes.wav")
+    clock.sleep(0.2)
+    for i=1,total_num do
+      engine.play_tape(1,i,1,0,1)
     end
   end)
 
@@ -144,7 +177,9 @@ end
 
 function redraw()
   screen.clear()
-
+  for _,p in ipairs(player) do
+    p:redraw()
+  end
   draw_message()
   screen.update()
 end
