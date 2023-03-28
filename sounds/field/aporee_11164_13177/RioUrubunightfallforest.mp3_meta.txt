@@ -1,0 +1,24 @@
+ETag: "ccbd2e499de13b3f00e0bb1696aed140"
+accept: */*
+authorization: LOW 46kEkoAwMlQPWMax:REDACTED_BY_IA_S3
+connection: close
+content-length: 7226657
+expect: 100-continue
+host: s3.us.archive.org
+x-amz-auto-make-bucket: 1
+x-archive-meta-altitude: 28
+x-archive-meta-contributor: radio aporee
+x-archive-meta-coverage: datum=WGS84; latitude=-2.8185722714; longitude=-59.1636943817; elevation=28; name=AM-010 - Itacoatiara - Amazonas, Brazil; date=2011-07-21 04:08:00 America/Manaus;
+x-archive-meta-creator: syltao
+x-archive-meta-date: 2011-07-21 04:08:00
+x-archive-meta-description: 17h30 primary / secondary forest mixed.<br />Low impacted area (only walking trails).<br />Exact localization to be verified/updated. <br />
+x-archive-meta-latitude: -2.8185722714
+x-archive-meta-licenseurl: http://creativecommons.org/licenses/by-sa/3.0/
+x-archive-meta-longitude: -59.1636943817
+x-archive-meta-mediatype: audio
+x-archive-meta-notes: <b>radio aporee ::: sounds of the world:</b><br> 			 open this recording on <a href=http://aporee.org/maps/?loc=11164>radio aporee ::: maps</a>, 			 a global sound-mapping project dedicated to field recording, phonography and the art of listening. 			 <a href=http://aporee.org/maps/info/>read more...</a>
+x-archive-meta-subject: field recording;phonography;soundscape;sound art;soundmap;radio;ephemeral;listening;radio aporee
+x-archive-meta-timezone: America/Manaus
+x-archive-meta-title: Rio Urubu, Amazonas, Brazil - Left bank forest at nightfall.
+x-archive-meta01-collection: radio-aporee-maps
+x-upload-date: 2013-02-21T22:42:57.000Z

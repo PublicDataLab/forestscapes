@@ -173,7 +173,7 @@ Engine_Forestscapes1 : CroneEngine {
         this.addCommand("sound_delta","f",{ arg msg;
             var num=msg[1].abs;
             if (msg[1]>0,{
-                this.playFolder("/home/we/dust/code/forestscapes/sounds",num);
+                this.playFolder("/home/we/dust/code/forestscapes/sounds/field/",num);
             });
             if (msg[1]<0,{
                 this.remove(num);
