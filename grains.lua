@@ -76,7 +76,7 @@ function init()
   end)
 
   clock.run(function()
-    engine.load_tape(1,"/home/we/dust/audio/windchimes.wav")
+    engine.load_tape(1,"/home/we/dust/code/forestscapes/sounds/kalimba.wav")
     clock.sleep(0.2)
     local rates={1,1,1,1,0.5,0.5,0.25,2,0.125}
     for i=1,total_num do
