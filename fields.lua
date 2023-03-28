@@ -78,14 +78,42 @@ end
 function redraw()
     screen.clear()
     screen.blend_mode(3)
+    local points={}
     for k,v in pairs(player) do 
         x=util.linlin(-1,1,0,128,v.lr)
         y=util.linlin(-1,1,0,64,v.fb)
         r=util.linlin(0,1,3,16,v.amp)
-        screen.circle(x,y,r)
+        table.insert(points,{x=x,y=y,r=r,used=false})
+    end
+    for _, point in ipairs(points) do 
+        screen.circle(point.x,point.y,point.r)
         screen.fill()
     end
+    -- local t={x=64,y=50}
+    -- table.insert(ts,t)
+    -- sort_points()
+    -- for i,p1 in ipairs(points) do 
+    --     for j,p2 in ipairs(points) do 
+    --         if j>i and not p1.used then 
+
+    --         end
+    --     end
+    -- end
     screen.update()
 end
 
+-- function sort_points(p1,points) 
+--     table.sort(points, function(a,b)
+--         if b.used then 
+--             return 100000
+--         end
+--         return distance(a,b)
+--     end)
+-- end
+
+function distance(p1,p2)
+    local dx = p1.x-p2.x
+    local dy = p1.y-p2.y
+    return math.sqrt ( dx * dx + dy * dy )
+end
 
