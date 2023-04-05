@@ -30,7 +30,8 @@ function Player:redraw()
   screen.rect((self.pan+1)*64,y,2,height)
   screen.fill()
   screen.level(util.round(util.linlin(0,1,1,6,self.volume)))
-  screen.rect(self.pos_start*128,y,(self.pos_end-self.pos_start)*128,height)
+  screen.circle(self.pos_start*128,y,(self.pos_end-self.pos_start)*128/2)
+  -- screen.rect(self.pos_start*128,y,(self.pos_end-self.pos_start)*128,height)
   screen.fill()
 end
 
