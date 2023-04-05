@@ -1,4 +1,10 @@
--- listen to the forest
+-- forestscapes: fields
+--
+-- llllllll.co/t/forestscapes
+--
+-- pseudo-ambisonics of 
+-- field recordings.
+--
 
 tree_=include("lib/tree")
 engine.name = "Forestscapes1"
@@ -73,10 +79,12 @@ function init()
 end
 
 function key(k,z)
+    if z==1 and k>1 then 
+        engine.sound_delta(_path.code.."forestscapes/sounds/",k==2 and -1 or 1)
+    end
 end
 
 function enc(k,d)
-    engine.sound_delta(_path.code.."forestscapes/sounds/",d)
 end
 
 function redraw()

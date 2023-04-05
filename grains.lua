@@ -1,4 +1,11 @@
--- skeleton
+-- forestscapes: grains
+--
+-- llllllll.co/t/forestscapes
+--
+-- granularization of
+-- field recordings.
+--
+
 musicutil=require("musicutil")
 tree_=include("lib/tree")
 player_=include("lib/player")
@@ -8,7 +15,8 @@ total_num=6
 player={}
 
 function init()
-  os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
+  --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
+
   tree = tree_:new{x=64,y=64,age=math.random(80,100)/100}
   player={}
   for i=1,total_num do
@@ -16,28 +24,28 @@ function init()
   end
 
 
-  params:add_file("fileload", "load file", _path.code.."forestscapes/field")
+  params:add_file("fileload", "load file", _path.code.."forestscapes/sounds/field")
   params:set_action("fileload",function(x)
     if (string.find(x,".ogg") or string.find(x,".wav")) then 
       engine.load_tape(1,x)
     end
   end)	
 
-  local params_menu={
-    {id="volume",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
-    {id="bool",name="bool",min=0,max=1,exp=false,div=1,default=0,response=1,formatter=function(param) return param:get()==1 and "yes" or "no" end},
-    {id="lpf",name="lpf",min=20,max=135,exp=false,div=0.5,default=135,formatter=function(param) return musicutil.note_num_to_freq(math.floor(param:get()),true)end},
-    {id="res",name="res",min=0.01,max=1,exp=false,div=0.01,default=0.71},
-  }
-  for _,pram in ipairs(params_menu) do
-    params:add{
-      type="control",
-      id=pram.id,
-      name=pram.name,
-      controlspec=controlspec.new(pram.min,pram.max,pram.exp and "exp" or "lin",pram.div,pram.default,pram.unit or "",pram.div/(pram.max-pram.min)),
-      formatter=pram.formatter,
-    }
-  end
+  -- local params_menu={
+  --   {id="volume",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
+  --   {id="bool",name="bool",min=0,max=1,exp=false,div=1,default=0,response=1,formatter=function(param) return param:get()==1 and "yes" or "no" end},
+  --   {id="lpf",name="lpf",min=20,max=135,exp=false,div=0.5,default=135,formatter=function(param) return musicutil.note_num_to_freq(math.floor(param:get()),true)end},
+  --   {id="res",name="res",min=0.01,max=1,exp=false,div=0.01,default=0.71},
+  -- }
+  -- for _,pram in ipairs(params_menu) do
+  --   params:add{
+  --     type="control",
+  --     id=pram.id,
+  --     name=pram.name,
+  --     controlspec=controlspec.new(pram.min,pram.max,pram.exp and "exp" or "lin",pram.div,pram.default,pram.unit or "",pram.div/(pram.max-pram.min)),
+  --     formatter=pram.formatter,
+  --   }
+  -- end
 
   params:bang()
 
@@ -94,7 +102,7 @@ function init()
     end
   end)
 
-  show_message("welcome")
+  -- show_message("welcome")
 end
 
 function show_progress(val)
