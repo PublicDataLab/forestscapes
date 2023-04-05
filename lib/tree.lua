@@ -17,7 +17,7 @@ function Tree:init()
   self.branchr=self.branchr or (self.branchl+math.random(-10,10)/100)
   self.age=self.age or math.random()
   self.color=0
-  self.coloring=math.random(4,15)
+  self.coloring=math.random(6,12)
   self.active=true
 end
 
@@ -34,6 +34,13 @@ function Tree:branches(a,b,len,ang,dir,count)
     local vx,vy=self:rotate(0,len,ang)
     vx=a+vx;vy=b-vy
     math.randomseed(len)
+    if count<=2 then 
+	    screen.line_width(3)
+    elseif count <=4 then
+	    screen.line_width(2)
+    else
+	    screen.line_width(1)
+    end
     self:line(a,b,vx,vy,util.round(self.color))
     self:branches(vx,vy,len+math.random()*2,ang,1,count+1)
     self:branches(vx,vy,len+math.random()*2,ang,0,count+1)
@@ -59,6 +66,7 @@ function Tree:redraw()
     local wid=self.x
     local hei=self.y
     local a,b=wid/2,hei-5
+    screen.line_width(4)
     self:line(wid/2,hei,a,b,self.color)
     math.randomseed(self.randseed)
     self:branches(a,b,util.linlin(-1,1,5,30,self.branchl)+math.random()*10,0,0,2,math.floor(util.linlin(-1,1,1,15,self.branchl)))

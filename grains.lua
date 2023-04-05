@@ -9,7 +9,7 @@ player={}
 
 function init()
   os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
-  tree = tree_:new{x=64,y=50,age=0.7}
+  tree = tree_:new{x=64,y=64,age=math.random(80,100)/100}
   player={}
   for i=1,total_num do
     table.insert(player,player_:new{id=i})
@@ -188,7 +188,7 @@ end
 
 function redraw()
   screen.clear()
-  tree:redaw()
+  tree:redraw()
   for _,p in ipairs(player) do
     p:redraw()
   end
