@@ -107,7 +107,7 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper1",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,timescale=20;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,timescale=3;
 			var sndl,sndr;
 			var snd=XPlayBuf.ar(1,buf,loop:1,trigger:Impulse.kr(0),startPos:BufDur.ir(buf)*Rand(0,1),fadeTime:3);
 			var lr=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine);
@@ -190,12 +190,12 @@ Engine_Forestscapes1 : CroneEngine {
 		"done loading.".postln;
 
         this.addCommand("sound_delta","sf",{ arg msg;
-			var folder=msg[1].asString;
+	    var folder=msg[1].asString;
             var num=msg[2].abs;
-            if (msg[1]>0,{
+            if (msg[2]>0,{
                 this.playFolder(folder,num);
             });
-            if (msg[1]<0,{
+            if (msg[2]<0,{
                 this.remove(num);
             });
         });

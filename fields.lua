@@ -7,7 +7,7 @@ player = {}
 function init() 
     print("starting")
     
-  tree = tree_:new{x=64,y=50,age=0.7}
+  tree = tree_:new{x=120,y=64,age=math.random(70,100)/100}
 
   -- setup osc
   osc_fun={
@@ -69,18 +69,19 @@ function init()
             redraw()
         end
     end)
+    engine.sound_delta(_path.code.."forestscapes/sounds/",2)
 end
 
 function key(k,z)
 end
 
 function enc(k,d)
-    engine.sound_delta(d)
+    engine.sound_delta(_path.code.."forestscapes/sounds/",d)
 end
 
 function redraw()
     screen.clear()
-    screen.blend_mode(3)
+    screen.blend_mode(12)
 
     tree:redraw()
 
@@ -89,9 +90,11 @@ function redraw()
         x=util.linlin(-1,1,0,128,v.lr)
         y=util.linlin(-1,1,0,64,v.fb)
         r=util.linlin(0,1,3,16,v.amp)
-        table.insert(points,{x=x,y=y,r=r,used=false})
+        l=util.linlin(0,1,15,1,v.amp)
+        table.insert(points,{x=x,y=y,r=r,used=false,l=util.round(l)})
     end
     for _, point in ipairs(points) do 
+	    screen.level(point.l)
         screen.circle(point.x,point.y,point.r)
         screen.fill()
     end
