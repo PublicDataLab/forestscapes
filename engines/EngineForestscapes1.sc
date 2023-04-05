@@ -9,6 +9,7 @@ Engine_Forestscapes1 : CroneEngine {
 	var buses;
 	var syns;
 	var synlist;
+	var oscs;
     // Forestscapes1 ^
 
     *new { arg context, doneCallback;
@@ -122,7 +123,9 @@ Engine_Forestscapes1 : CroneEngine {
 			sndl=SelectX.ar(((lr>0.1)*lr.abs),[sndl,DelayN.ar(sndl,0.03,Rand(0.0,0.03))]);
 			sndr=SelectX.ar(((lr<0.1.neg)*lr.abs),[sndr,DelayN.ar(sndr,0.03,Rand(0.0,0.03))]);
 			snd=Balance2.ar(sndl,sndr,pan,amp)*Line.kr(0,1,1);
-			snd=snd*EnvGen.ar(Env.adsr(10,1,1,10,curve:[4,4]),gate,doneAction:2);
+			amp = amp * EnvGen.ar(Env.adsr(10,1,1,10,curve:[4,4]),gate,doneAction:2);
+			snd=snd*amp;
+			SendReply.kr(Impulse.kr(10),"/position",[buf,lr,fb,amp]);
 			Out.ar(busCompress,(fb+1)/2*snd);
 			Out.ar(busNoCompress,(1-((fb+1)/2))*snd);
 			Out.ar(busReverb,LinExp.kr(fb,1,-1,0.01,0.19)*snd);
@@ -144,7 +147,9 @@ Engine_Forestscapes1 : CroneEngine {
 			sndl=SelectX.ar(((lr>0.1)*lr.abs),[sndl,DelayN.ar(sndl,0.03,Rand(0.0,0.03))]);
 			sndr=SelectX.ar(((lr<0.1.neg)*lr.abs),[sndr,DelayN.ar(sndr,0.03,Rand(0.0,0.03))]);
 			snd=Balance2.ar(sndl,sndr,pan,amp)*Line.kr(0,1,1);
-			snd=snd*EnvGen.ar(Env.adsr(10,1,1,10,curve:[4,4]),gate,doneAction:2);
+			amp = amp * EnvGen.ar(Env.adsr(10,1,1,10,curve:[4,4]),gate,doneAction:2);
+			snd=snd*amp;
+			SendReply.kr(Impulse.kr(10),"/position",[buf,lr,fb,amp]);
 			Out.ar(busCompress,(fb+1)/2*snd);
 			Out.ar(busNoCompress,(1-((fb+1)/2))*snd);
 			Out.ar(busReverb,LinExp.kr(fb,1,-1,0.01,0.19)*snd);
@@ -155,10 +160,25 @@ Engine_Forestscapes1 : CroneEngine {
 		syns = Dictionary.new();
 		buses = Dictionary.new();
 		bufs = Dictionary.new();
+		oscs = Dictionary.new();
 		synlist = Array.new();
 
 		server.sync;
 
+
+		oscs.put("position",OSCFunc({ |msg|
+			var oscRoute=msg[0];
+			var synNum=msg[1];
+			var dunno=msg[2];
+			var bufNum=msg[3].asInteger;
+			var lr=msg[4];
+			var fb=msg[5];
+			var amp=msg[6];
+			NetAddr("127.0.0.1", 10111).sendMsg("lr",bufNum,lr);
+			NetAddr("127.0.0.1", 10111).sendMsg("fb",bufNum,fb);
+			NetAddr("127.0.0.1", 10111).sendMsg("amp",bufNum,amp);
+		}, '/position'));
+		
 		// define buses
 		buses.put("busCompress",Bus.audio(server,2));
 		buses.put("busNoCompress",Bus.audio(server,2));
@@ -184,6 +204,9 @@ Engine_Forestscapes1 : CroneEngine {
 
 	free {
 		bufs.keysValuesDo({ arg k, val;
+			val.free;
+		});
+		oscs.keysValuesDo({ arg k, val;
 			val.free;
 		});
 		syns.keysValuesDo({ arg k, val;

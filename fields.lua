@@ -1,16 +1,44 @@
 -- listen to the forest
 
-tree_=include("lib/tree")
 engine.name = "Forestscapes1"
-mod={0.2,0.5,0.3,-0.5}
+player = {}
 
 function init() 
     print("starting")
-
-    trees={}
-    for i=1,1 do 
-        table.insert(trees,tree_:new())
+    
+  -- setup osc
+  osc_fun={
+    oscnotify=function(args)
+      print("file edited ok!")
+      rerun()
+    end,
+    lr=function(args)
+        if player[tonumber(args[1])]==nil then 
+            player[tonumber(args[1])]={lr=0,fb=0,amp=0}
+        end
+        player[tonumber(args[1])].lr=tonumber(args[2])
+    end,
+    fb=function(args)
+        if player[tonumber(args[1])]==nil then 
+            player[tonumber(args[1])]={lr=0,fb=0,amp=0}
+        end
+        player[tonumber(args[1])].fb=tonumber(args[2])
+    end,
+    amp=function(args)
+        if player[tonumber(args[1])]==nil then 
+            player[tonumber(args[1])]={lr=0,fb=0,amp=0}
+        end
+        player[tonumber(args[1])].amp=tonumber(args[2])
+    end,
+  }
+  osc.event=function(path,args,from)
+    if string.sub(path,1,1)=="/" then
+      path=string.sub(path,2)
     end
+    if osc_fun[path]~=nil then osc_fun[path](args) else
+      -- print("osc.event: '"..path.."' ?")
+    end
+  end
 
     local params_menu={
     }
@@ -49,8 +77,43 @@ end
 
 function redraw()
     screen.clear()
-    trees[1]:redraw()
+    screen.blend_mode(3)
+    local points={}
+    for k,v in pairs(player) do 
+        x=util.linlin(-1,1,0,128,v.lr)
+        y=util.linlin(-1,1,0,64,v.fb)
+        r=util.linlin(0,1,3,16,v.amp)
+        table.insert(points,{x=x,y=y,r=r,used=false})
+    end
+    for _, point in ipairs(points) do 
+        screen.circle(point.x,point.y,point.r)
+        screen.fill()
+    end
+    -- local t={x=64,y=50}
+    -- table.insert(ts,t)
+    -- sort_points()
+    -- for i,p1 in ipairs(points) do 
+    --     for j,p2 in ipairs(points) do 
+    --         if j>i and not p1.used then 
+
+    --         end
+    --     end
+    -- end
     screen.update()
 end
 
+-- function sort_points(p1,points) 
+--     table.sort(points, function(a,b)
+--         if b.used then 
+--             return 100000
+--         end
+--         return distance(a,b)
+--     end)
+-- end
+
+function distance(p1,p2)
+    local dx = p1.x-p2.x
+    local dy = p1.y-p2.y
+    return math.sqrt ( dx * dx + dy * dy )
+end
 
