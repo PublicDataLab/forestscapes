@@ -15,16 +15,21 @@ Engine_Forestscapes2 : CroneEngine {
         ^super.new(context, doneCallback);
     }
 
-
 	loadTape {
 		arg tape=1,filename="";
 		var tapeid="tape"++tape;
 		if (filename=="",{
-			("[ube] error: need to provide filename").postln;
+			("[forestscapes2] error: need to provide filename").postln;
 			^nil
 		});
 		bufs.put(tapeid,Buffer.read(server,filename,action:{ arg buf;
-			("[ube] loaded"+tape+filename).postln;
+			("[forestscapes2] loaded"+tape+filename).postln;
+			syns.keysValuesDo({ arg k, syn;
+				if (syn.isRunning,{
+					("[forestscapes2] updating"+syn).postln;
+					syn.set(\buf,buf);
+				});
+			});
 		}));
 	}
 
@@ -35,13 +40,13 @@ Engine_Forestscapes2 : CroneEngine {
 		var playid="player"++player++tapeid;
 
 		if (bufs.at(tapeid).isNil,{
-			("[ube] cannot play empty tape"+tape).postln;
+			("[forestscapes2] cannot play empty tape"+tape).postln;
 			^0
 		});
-		("[ube] player"+player+"playing tape"+tape).postln;
+		("[forestscapes2] player"+player+"playing tape"+tape).postln;
 
 		syns.put(playid,Synth.head(server,"looper",[\tape,tape,\player,player,\buf,bufs.at(tapeid),\baseRate,rate,\amp,amp,\timescale,timescale]).onFree({
-			("[ube] player"+player+"finished.").postln;
+			("[forestscapes2] player"+player+"finished.").postln;
 		}));
 		NodeWatcher.register(syns.at(playid));
 	}
@@ -55,8 +60,6 @@ Engine_Forestscapes2 : CroneEngine {
 		syns = Dictionary.new();
 		oscs = Dictionary.new();
 		buses = Dictionary.new();
-
-
 
 		SynthDef("looper",{
 			// main arguments
@@ -133,17 +136,11 @@ Engine_Forestscapes2 : CroneEngine {
 			arg amp=1.0;
 			var snd=In.ar(0,2);
 			snd=HPF.ar(snd,80);
-			// add some nice tape compression
-			snd = AnalogTape.ar(snd,0.9,0.8,0.9,2);
+			
 			// add some reverb
 			snd=SelectX.ar(LFNoise2.kr(1/3).range(0.3,0.6),[
 				snd,
-				Fverb.ar(snd[0],snd[1],50,decay:LFNoise2.kr(1/3).range(70,90))
-			]);
-			// add some analog chewing
-			snd=SelectX.ar(LFNoise2.kr(1/3).range(0,1),[
-				snd,
-				AnalogChew.ar(snd);
+				FreeVerb2.ar(snd[0],snd[1])
 			]);
 
 			// replace the output with the effected output
@@ -173,17 +170,6 @@ Engine_Forestscapes2 : CroneEngine {
 			NetAddr("127.0.0.1", 10111).sendMsg("posEnd",player,posEnd);
 			NetAddr("127.0.0.1", 10111).sendMsg("volume",player,volume);
 			NetAddr("127.0.0.1", 10111).sendMsg("pan",player,pan);
-			// var oscRoute=msg[0];
-			// var synNum=msg[1];
-			// var dunno=msg[2];
-			// var tape=msg[3].asInteger;
-			// var player=msg[4].asInteger;
-			// var posStart=msg[5];
-			// var posEnd=msg[6];
-			// var pos=msg[7];
-			// var volume=msg[8];
-			// var pan=msg[9];
-			// windata.put(player,[tape,posStart,posEnd,pos,volume,pan]);
 		}, '/position'));
 
         this.addCommand("load_tape","is",{ arg msg;

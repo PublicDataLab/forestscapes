@@ -11,11 +11,11 @@ end
 function Tree:init()
   math.randomseed(os.time())
   self.randseed=math.random(1,10)
-  self.x=math.random(40,100)
-  self.y=math.random(50,70)
-  self.branchl=math.random(-100,100)/100
-  self.branchr=self.branchl+math.random(-10,10)/100
-  self.age=math.random()
+  self.x=self.x or math.random(40,100)
+  self.y=self.y or math.random(50,70)
+  self.branchl=self.branchl or math.random(-100,100)/100
+  self.branchr=self.branchr or (self.branchl+math.random(-10,10)/100)
+  self.age=self.age or math.random()
   self.color=0
   self.coloring=math.random(4,15)
   self.active=true

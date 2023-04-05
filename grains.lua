@@ -1,5 +1,6 @@
 -- skeleton
 musicutil=require("musicutil")
+tree_=include("lib/tree")
 player_=include("lib/player")
 engine.name="Forestscapes2"
 
@@ -8,11 +9,19 @@ player={}
 
 function init()
   os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
-
+  tree = tree_:new{x=64,y=50,age=0.7}
   player={}
   for i=1,total_num do
     table.insert(player,player_:new{id=i})
   end
+
+
+  params:add_file("fileload", "load file", _path.code.."forestscapes/field")
+  params:set_action("fileload",function(x)
+    if (string.find(x,".ogg") or string.find(x,".wav")) then 
+      engine.load_tape(1,x)
+    end
+  end)	
 
   local params_menu={
     {id="volume",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
@@ -76,7 +85,8 @@ function init()
   end)
 
   clock.run(function()
-    engine.load_tape(1,"/home/we/dust/code/forestscapes/sounds/kalimba.wav")
+    clock.sleep(0.2)
+    params:set("fileload","/home/we/dust/code/forestscapes/sounds/field/aporee_10028_11970/UnderskibridgeGammlia.ogg")
     clock.sleep(0.2)
     local rates={1,1,1,1,0.5,0.5,0.25,2,0.125}
     for i=1,total_num do
@@ -178,6 +188,7 @@ end
 
 function redraw()
   screen.clear()
+  tree:redaw()
   for _,p in ipairs(player) do
     p:redraw()
   end

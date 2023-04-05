@@ -1,11 +1,14 @@
 -- listen to the forest
 
+tree_=include("lib/tree")
 engine.name = "Forestscapes1"
 player = {}
 
 function init() 
     print("starting")
     
+  tree = tree_:new{x=64,y=50,age=0.7}
+
   -- setup osc
   osc_fun={
     oscnotify=function(args)
@@ -78,6 +81,9 @@ end
 function redraw()
     screen.clear()
     screen.blend_mode(3)
+
+    tree:redraw()
+
     local points={}
     for k,v in pairs(player) do 
         x=util.linlin(-1,1,0,128,v.lr)
@@ -89,27 +95,9 @@ function redraw()
         screen.circle(point.x,point.y,point.r)
         screen.fill()
     end
-    -- local t={x=64,y=50}
-    -- table.insert(ts,t)
-    -- sort_points()
-    -- for i,p1 in ipairs(points) do 
-    --     for j,p2 in ipairs(points) do 
-    --         if j>i and not p1.used then 
-
-    --         end
-    --     end
-    -- end
     screen.update()
 end
 
--- function sort_points(p1,points) 
---     table.sort(points, function(a,b)
---         if b.used then 
---             return 100000
---         end
---         return distance(a,b)
---     end)
--- end
 
 function distance(p1,p2)
     local dx = p1.x-p2.x

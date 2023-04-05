@@ -102,8 +102,7 @@ Engine_Forestscapes1 : CroneEngine {
 			var sndNoCompress=In.ar(busNoCompress,2);
 			sndCompress=Compander.ar(sndCompress,sndCompress,0.05,slopeAbove:0.1,relaxTime:0.01);
 			sndNoCompress=Compander.ar(sndNoCompress,sndNoCompress,1,slopeAbove:0.1,relaxTime:0.01);
-			sndReverb=Fverb.ar(sndReverb[0],sndReverb[1],60,decay:80);
-			// sndReverb=FreeVerb2.ar(sndReverb[0],sndReverb[1],1.0,0.7);
+			sndReverb=FreeVerb2.ar(sndReverb[0],sndReverb[1],1.0,0.7);
 			Out.ar(0,sndCompress+sndNoCompress+sndReverb);
 		}).add;
 
@@ -190,10 +189,11 @@ Engine_Forestscapes1 : CroneEngine {
 		server.sync;
 		"done loading.".postln;
 
-        this.addCommand("sound_delta","f",{ arg msg;
-            var num=msg[1].abs;
+        this.addCommand("sound_delta","sf",{ arg msg;
+			var folder=msg[1].asString;
+            var num=msg[2].abs;
             if (msg[1]>0,{
-                this.playFolder("/home/we/dust/code/forestscapes/sounds/field/",num);
+                this.playFolder(folder,num);
             });
             if (msg[1]<0,{
                 this.remove(num);
