@@ -14,6 +14,7 @@ forestscapes is two scripts:
 
 ## Requirements
 
+- 100 mb of disk space
 - norns
 
 ## Documentation
