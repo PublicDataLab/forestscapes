@@ -57,7 +57,7 @@ function init()
     -- {id="bool",name="bool",min=0,max=1,exp=false,div=1,default=0,response=1,formatter=function(param) return param:get()==1 and "yes" or "no" end},
     -- {id="lpf",name="lpf",min=20,max=135,exp=false,div=0.5,default=135,formatter=function(param) return musicutil.note_num_to_freq(math.floor(param:get()),true)end},
     {id="rateMult",name="rate",min=-4,max=4,exp=false,div=0.01,default=1},
-    {id="timescalein",name="timescale",min=0.1,max=100,exp=true,div=0.1,default=1},
+    {id="timescalein",name="speed",min=0.1,max=100,exp=true,div=0.1,default=1},
   }
   for _,pram in ipairs(params_menu) do
     params:add{
