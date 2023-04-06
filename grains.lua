@@ -69,6 +69,9 @@ function init()
       formatter=pram.formatter,
     }
     params:set_action(pram.id,function(x)
+	    if pram.id=="rateMult" and math.abs(x)<0.1 then 
+		    x=0.1 * (x>0 and 1 or -1)
+	    end
       engine.setp(pram.id,x)
     end)
   end
