@@ -118,8 +118,9 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper1",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescale=20;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescalein=0.05;
 			var sndl,sndr;
+                        var timescale = 1.0 / timescalein; 
 			var snd=PlayBuf.ar(1,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
 			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
@@ -142,8 +143,9 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper2",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescale=20;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescalein=0.05;
 			var sndl,sndr;
+                        var timescale = 1.0 / timescalein; 
 			var snd=PlayBuf.ar(2,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
 			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));

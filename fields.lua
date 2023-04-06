@@ -10,7 +10,7 @@
 -- K3/K2 adds/removes sound
 -- E1 changes volume
 -- E2 changes rate
--- E3 changes timescale
+-- E3 changes movement speed
 
 tree_=include("lib/tree")
 engine.name="Forestscapes1"
@@ -86,7 +86,7 @@ function init()
   local params_menu={
     {id="db",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
     {id="rateMult",name="rate",min=-4,max=4,exp=false,div=0.01,default=1},
-    {id="timescale",name="timescale",min=0.1,max=100,exp=true,div=0.5,default=20},
+    {id="timescalein",name="speed",min=0.01,max=10,exp=false,div=0.01,default=0.05},
   }
   for _,pram in ipairs(params_menu) do
     params:add{
