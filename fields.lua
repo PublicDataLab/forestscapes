@@ -26,7 +26,7 @@ reverb_settings={
 }
 function init()
   --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
-  
+
   for k,v in pairs(reverb_settings) do
     reverb_settings_saved[k]=params:get(k)
     params:set(k,v)
@@ -86,7 +86,7 @@ function init()
   local params_menu={
     {id="db",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
     {id="rateMult",name="rate",min=-4,max=4,exp=false,div=0.01,default=1},
-    {id="timescalein",name="speed",min=0.01,max=10,exp=false,div=0.01,default=0.05},
+    {id="timescalein",name="speed",min=0.01,max=100,exp=true,div=0.01,default=1},
   }
   for _,pram in ipairs(params_menu) do
     params:add{
@@ -97,6 +97,9 @@ function init()
       formatter=pram.formatter,
     }
     params:set_action(pram.id,function(x)
+      if pram.id=="timescalein" then
+        x=x*0.05
+      end
       engine.setp(pram.id,x)
     end)
   end
