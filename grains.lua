@@ -16,26 +16,26 @@ player={}
 
 function init()
   --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
-    params:set("reverb",2)
-    params:set("rev_eng_input",0)
-    params:set("rev_return_level",0)
-    params:set("rev_low_time",9)
-    params:set("rev_mid_time",6)
+  params:set("reverb",2)
+  params:set("rev_eng_input",0)
+  params:set("rev_return_level",0)
+  params:set("rev_low_time",9)
+  params:set("rev_mid_time",6)
 
 
-  tree = tree_:new{x=64,y=64,age=math.random(80,100)/100}
+  tree=tree_:new{x=64,y=64,age=math.random(80,100)/100}
   player={}
   for i=1,total_num do
     table.insert(player,player_:new{id=i})
   end
 
 
-  params:add_file("fileload", "load file", _path.code.."forestscapes/sounds/field")
+  params:add_file("fileload","load file",_path.code.."forestscapes/sounds/field")
   params:set_action("fileload",function(x)
-    if (string.find(x,".ogg") or string.find(x,".wav")) then 
+    if (string.find(x,".ogg") or string.find(x,".wav")) then
       engine.load_tape(1,x)
     end
-  end)	
+  end)
 
   local params_menu={
     {id="db",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
@@ -54,7 +54,7 @@ function init()
     }
     params:set_action(pram.id,function(x)
       engine.setp(pram.id,x)
-      end)
+    end)
   end
 
   params:bang()

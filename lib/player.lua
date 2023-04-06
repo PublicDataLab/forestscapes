@@ -18,9 +18,9 @@ function Player:init()
 end
 
 function Player:redraw()
-  if self.wait>0 then 
-    self.wait = self.wait - 1
-    do return end 
+  if self.wait>0 then
+    self.wait=self.wait-1
+    do return end
   end
   local spacing=4
   local height=64/total_num
