@@ -121,10 +121,10 @@ Engine_Forestscapes1 : CroneEngine {
 			arg buf,busReverb,busCompress,busNoCompress,gate=1,timescale=3;
 			var sndl,sndr;
 			var snd=XPlayBuf.ar(1,buf,loop:1,trigger:Impulse.kr(0),startPos:BufDur.ir(buf)*Rand(0,1),fadeTime:3);
-			var lr=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine);
-			var fb=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine);
+			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
+			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
+			var amp=LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
 			var pan=lr*0.5;
-			var amp=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine).range(0,1)*(Rand(-12,0).dbamp);
 			snd=HPF.ar(snd,LinLin.kr(fb,-1,1,20,1000));
 			sndl=snd;
 			sndr=snd;
@@ -145,10 +145,10 @@ Engine_Forestscapes1 : CroneEngine {
 			arg buf,busReverb,busCompress,busNoCompress,gate=1,timescale=20;
 			var sndl,sndr;
 			var snd=XPlayBuf.ar(2,buf,loop:1,trigger:Impulse.kr(0),startPos:BufDur.ir(buf)*Rand(0,1),fadeTime:3);
-			var lr=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine);
-			var fb=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine);
+			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
+			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
+			var amp=LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
 			var pan=lr*0.5;
-			var amp=VarLag.kr(LFNoise0.kr(1/timescale),timescale,warp:\sine).range(0,1)*(Rand(-12,0).dbamp);
 			snd=HPF.ar(snd,LinLin.kr(fb,-1,1,20,1000));
 			sndl=snd[0];
 			sndr=snd[1];

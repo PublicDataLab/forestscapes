@@ -100,9 +100,11 @@ end
 function enc(k,d)
 end
 
+b_mod=2
+
 function redraw()
   screen.clear()
-  screen.blend_mode(12)
+  screen.blend_mode(b_mod)
 
   tree:redraw()
 
@@ -111,7 +113,7 @@ function redraw()
     x=util.linlin(-1,1,0,128,v.lr)
     y=util.linlin(-1,1,0,64,v.fb)
     r=util.linlin(0,1,3,16,v.amp)
-    l=util.linlin(0,1,15,1,v.amp)
+    l=util.linlin(0,1,10,1,v.amp)
     table.insert(points,{x=x,y=y,r=r,used=false,l=util.round(l),on=v.on})
   end
   for _,point in ipairs(points) do
