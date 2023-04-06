@@ -17,7 +17,8 @@ function Tree:init()
   self.branchr=self.branchr or (self.branchl+math.random(-10,10)/100)
   self.age=self.age or math.random()
   self.color=0
-  self.coloring=math.random(6,12)
+  self.coloring=math.random(4,8)
+  self.ll=0
   self.active=true
 end
 
@@ -61,16 +62,18 @@ function Tree:redraw()
   end
   if self.active and self.color<self.coloring then 
     self.color=self.color + 0.25
+    self.ll=util.round(self.color)
   end
 
     local wid=self.x
     local hei=self.y
     local a,b=wid/2,hei-5
+    local ll=util.round(self.color)
     screen.line_width(4)
     self:line(wid/2,hei,a,b,self.color)
     math.randomseed(self.randseed)
-    self:branches(a,b,util.linlin(-1,1,5,30,self.branchl)+math.random()*10,0,0,2,math.floor(util.linlin(-1,1,1,15,self.branchl)))
-    self:branches(a,b,util.linlin(-1,1,5,30,self.branchr)+math.random()*10,0,1,2,math.floor(util.linlin(-1,1,1,15,self.branchr)))
+    self:branches(a,b,util.linlin(-1,1,5,30,self.branchl)+math.random()*10,0,0,2,math.floor(util.linlin(-1,1,1,self.ll,self.branchl)))
+    self:branches(a,b,util.linlin(-1,1,5,30,self.branchr)+math.random()*10,0,1,2,math.floor(util.linlin(-1,1,1,self.ll,self.branchr)))
 end
 
 function Tree:line(x1,y1,x2,y2,level)

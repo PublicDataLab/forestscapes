@@ -16,6 +16,12 @@ player={}
 
 function init()
   --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
+    params:set("reverb",2)
+    params:set("rev_eng_input",0)
+    params:set("rev_return_level",0)
+    params:set("rev_low_time",9)
+    params:set("rev_mid_time",6)
+
 
   tree = tree_:new{x=64,y=64,age=math.random(80,100)/100}
   player={}
@@ -31,21 +37,25 @@ function init()
     end
   end)	
 
-  -- local params_menu={
-  --   {id="volume",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
-  --   {id="bool",name="bool",min=0,max=1,exp=false,div=1,default=0,response=1,formatter=function(param) return param:get()==1 and "yes" or "no" end},
-  --   {id="lpf",name="lpf",min=20,max=135,exp=false,div=0.5,default=135,formatter=function(param) return musicutil.note_num_to_freq(math.floor(param:get()),true)end},
-  --   {id="res",name="res",min=0.01,max=1,exp=false,div=0.01,default=0.71},
-  -- }
-  -- for _,pram in ipairs(params_menu) do
-  --   params:add{
-  --     type="control",
-  --     id=pram.id,
-  --     name=pram.name,
-  --     controlspec=controlspec.new(pram.min,pram.max,pram.exp and "exp" or "lin",pram.div,pram.default,pram.unit or "",pram.div/(pram.max-pram.min)),
-  --     formatter=pram.formatter,
-  --   }
-  -- end
+  local params_menu={
+    {id="db",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
+    -- {id="bool",name="bool",min=0,max=1,exp=false,div=1,default=0,response=1,formatter=function(param) return param:get()==1 and "yes" or "no" end},
+    -- {id="lpf",name="lpf",min=20,max=135,exp=false,div=0.5,default=135,formatter=function(param) return musicutil.note_num_to_freq(math.floor(param:get()),true)end},
+    {id="rateMult",name="rate",min=0.1,max=4,exp=false,div=0.1,default=1},
+    {id="timescalein",name="timescale",min=0.1,max=100,exp=true,div=0.1,default=1},
+  }
+  for _,pram in ipairs(params_menu) do
+    params:add{
+      type="control",
+      id=pram.id,
+      name=pram.name,
+      controlspec=controlspec.new(pram.min,pram.max,pram.exp and "exp" or "lin",pram.div,pram.default,pram.unit or "",pram.div/(pram.max-pram.min)),
+      formatter=pram.formatter,
+    }
+    params:set_action(pram.id,function(x)
+      engine.setp(pram.id,x)
+      end)
+  end
 
   params:bang()
 
@@ -94,9 +104,9 @@ function init()
 
   clock.run(function()
     clock.sleep(0.2)
-    params:set("fileload","/home/we/dust/code/forestscapes/sounds/field/aporee_10028_11970/UnderskibridgeGammlia.ogg")
+    params:set("fileload","/home/we/dust/code/forestscapes/sounds/field/aporee_11164_13177/RioUrubunightfallforest.ogg")
     clock.sleep(0.2)
-    local rates={1,1,1,1,0.5,0.5,0.25,2,0.125}
+    local rates={1,1,1,0.125/2,0.5,0.5,0.25,2,0.125}
     for i=1,total_num do
       engine.play_tape(1,i,rates[math.random(#rates)],0,1)
     end
@@ -190,8 +200,9 @@ function key(k,z)
   kon[k]=z==1
 end
 
+encs={"db","rateMult","timescalein"}
 function enc(k,d)
-
+  params:delta(encs[k],d)
 end
 
 function redraw()

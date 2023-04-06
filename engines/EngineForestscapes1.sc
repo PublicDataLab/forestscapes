@@ -77,13 +77,21 @@ Engine_Forestscapes1 : CroneEngine {
             if (bufs.at(fname).isNil,{
                 bufs.put(fname,Buffer.read(server,fname,0,-1,action:{
                     "loooping audio file".postln;
-                    syns.put(fname,Synth.before(syns.at("fx"),"looper2",[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]));
+		NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,1);
+                    syns.put(fname,Synth.before(syns.at("fx"),"looper2",[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
+			NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,0);
+
+		    }));
                     NodeWatcher.register(syns.at(fname));
                 }));
             },{
                 // only allow one sample of one kind to play at once
                 this.stop(fname);
-                syns.put(fname,Synth.before(syns.at("fx"),"looper2",[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]));
+		NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,1);
+                syns.put(fname,Synth.before(syns.at("fx"),"looper2",[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
+			NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,0);
+
+		}));
                 NodeWatcher.register(syns.at(fname));
             });
             synlist=synlist.add(fname);
@@ -97,13 +105,16 @@ Engine_Forestscapes1 : CroneEngine {
 		// basic players
 		SynthDef("fx",{
 			arg busReverb,busCompress,busNoCompress;
+			var snd;
 			var sndReverb=In.ar(busReverb,2);
 			var sndCompress=In.ar(busCompress,2);
 			var sndNoCompress=In.ar(busNoCompress,2);
 			sndCompress=Compander.ar(sndCompress,sndCompress,0.05,slopeAbove:0.1,relaxTime:0.01);
 			sndNoCompress=Compander.ar(sndNoCompress,sndNoCompress,1,slopeAbove:0.1,relaxTime:0.01);
 			sndReverb=FreeVerb2.ar(sndReverb[0],sndReverb[1],1.0,0.7);
-			Out.ar(0,sndCompress+sndNoCompress+sndReverb);
+
+			snd=sndCompress+sndNoCompress+sndReverb;
+			Out.ar(0,snd*Line.ar(0,1,3));
 		}).add;
 
 		SynthDef("looper1",{
@@ -122,7 +133,7 @@ Engine_Forestscapes1 : CroneEngine {
 			sndl=SelectX.ar(((lr>0.1)*lr.abs),[sndl,DelayN.ar(sndl,0.03,Rand(0.0,0.03))]);
 			sndr=SelectX.ar(((lr<0.1.neg)*lr.abs),[sndr,DelayN.ar(sndr,0.03,Rand(0.0,0.03))]);
 			snd=Balance2.ar(sndl,sndr,pan,amp)*Line.kr(0,1,1);
-			amp = amp * EnvGen.ar(Env.adsr(10,1,1,10,curve:[4,4]),gate,doneAction:2);
+			amp = amp * EnvGen.ar(Env.adsr(1.1,1,1,1.1,curve:[4,4]),gate,doneAction:2);
 			snd=snd*amp;
 			SendReply.kr(Impulse.kr(10),"/position",[buf,lr,fb,amp]);
 			Out.ar(busCompress,(fb+1)/2*snd);
@@ -146,7 +157,7 @@ Engine_Forestscapes1 : CroneEngine {
 			sndl=SelectX.ar(((lr>0.1)*lr.abs),[sndl,DelayN.ar(sndl,0.03,Rand(0.0,0.03))]);
 			sndr=SelectX.ar(((lr<0.1.neg)*lr.abs),[sndr,DelayN.ar(sndr,0.03,Rand(0.0,0.03))]);
 			snd=Balance2.ar(sndl,sndr,pan,amp)*Line.kr(0,1,1);
-			amp = amp * EnvGen.ar(Env.adsr(10,1,1,10,curve:[4,4]),gate,doneAction:2);
+			amp = amp * EnvGen.ar(Env.adsr(1.1,1,1,1.1,curve:[4,4]),gate,doneAction:2);
 			snd=snd*amp;
 			SendReply.kr(Impulse.kr(10),"/position",[buf,lr,fb,amp]);
 			Out.ar(busCompress,(fb+1)/2*snd);

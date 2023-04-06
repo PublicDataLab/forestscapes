@@ -33,6 +33,7 @@ Engine_Forestscapes2 : CroneEngine {
 		}));
 	}
 
+
 	playTape {
 		arg tape=1,player=1,rate=1.0,db=0.0,timescale=1;
 		var amp=db.dbamp;
@@ -63,19 +64,21 @@ Engine_Forestscapes2 : CroneEngine {
 
 		SynthDef("looper",{
 			// main arguments
-			arg buf,tape,player,baseRate=1.0,amp=1.0,timescale=0.2;
+			arg buf,tape,player,baseRate=1.0,rateMult=1.0,db=0.0,timescalein=1;
 			// variables to store UGens later
+			var amp = db.dbamp;
 			var volume;
 			var switch=0,snd,snd1,snd2,pos,pos1,pos2,posStart,posEnd,index;
 			// store the number of frames and the duraiton
 			var frames=BufFrames.kr(buf);
 			var duration=BufDur.kr(buf);
+			var timescale = timescalein / duration * 5;
 			// LFO for the start point <-- tinker
 			var lfoStart=SinOsc.kr(timescale/Rand(30,60),Rand(hi:2*pi)).range(1024,frames-10240);
 			// LFO for the window lenth <-- tinker
 			var lfoWindow=SinOsc.kr(timescale/Rand(60,120),Rand(hi:2*pi)).range(4096,frames/2);
 			// LFO for the rate (right now its not an LFO)
-			var lfoRate=baseRate;//*Select.kr(SinOsc.kr(1/Rand(10,30)).range(0,4.9),[1,0.25,0.5,1,2]);
+			var lfoRate=baseRate*rateMult;//*Select.kr(SinOsc.kr(1/Rand(10,30)).range(0,4.9),[1,0.25,0.5,1,2]);
 			// LFO for switching between forward and reverse <-- tinker
 			var lfoForward=Demand.kr(Impulse.kr(timescale/Rand(5,15)),0,Drand([0,1],inf));
 			// LFO for the volume <-- tinker
@@ -179,6 +182,14 @@ Engine_Forestscapes2 : CroneEngine {
         this.addCommand("play_tape","iifff",{ arg msg;
         	this.playTape(msg[1],msg[2],msg[3],msg[4],msg[5]);
         });
+
+	this.addCommand("setp","sf",{ arg msg;
+			syns.keysValuesDo({ arg k, syn;
+				if (syn.isRunning,{
+					syn.set(msg[1].asString,msg[2]);
+				});
+			});
+	});
     }
 
 
