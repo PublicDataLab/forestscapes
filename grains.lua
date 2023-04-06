@@ -5,6 +5,13 @@
 -- granularization of
 -- field recordings.
 --
+--    ▼ instructions below ▼
+--
+-- K3 reverse sounds
+-- E1 changes volume
+-- E2 changes rate
+-- E3 changes timescale
+
 
 musicutil=require("musicutil")
 tree_=include("lib/tree")
@@ -14,13 +21,21 @@ engine.name="Forestscapes2"
 total_num=6
 player={}
 
+reverb_settings_saved={}
+reverb_settings={
+  reverb=2,
+  rev_eng_input=0,
+  rev_return_level=0,
+  rev_low_time=9,
+  rev_mid_time=6,
+}
 function init()
   --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
-  params:set("reverb",2)
-  params:set("rev_eng_input",0)
-  params:set("rev_return_level",0)
-  params:set("rev_low_time",9)
-  params:set("rev_mid_time",6)
+  
+  for k,v in pairs(reverb_settings) do
+    reverb_settings_saved[k]=params:get(k)
+    params:set(k,v)
+  end
 
 
   tree=tree_:new{x=64,y=64,age=math.random(80,100)/100}
@@ -41,7 +56,7 @@ function init()
     {id="db",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
     -- {id="bool",name="bool",min=0,max=1,exp=false,div=1,default=0,response=1,formatter=function(param) return param:get()==1 and "yes" or "no" end},
     -- {id="lpf",name="lpf",min=20,max=135,exp=false,div=0.5,default=135,formatter=function(param) return musicutil.note_num_to_freq(math.floor(param:get()),true)end},
-    {id="rateMult",name="rate",min=0.1,max=4,exp=false,div=0.1,default=1},
+    {id="rateMult",name="rate",min=-4,max=4,exp=false,div=0.01,default=1},
     {id="timescalein",name="timescale",min=0.1,max=100,exp=true,div=0.1,default=1},
   }
   for _,pram in ipairs(params_menu) do
@@ -192,12 +207,19 @@ end
 
 function cleanup()
   os.execute("pkill -f oscnotify")
+  for k,v in pairs(reverb_settings_saved) do
+    params:set(k,v)
+  end
 end
 
 kon={false,false,false}
 
 function key(k,z)
   kon[k]=z==1
+  if z==1 and k==3 then 
+    -- reverse
+    params:set("rateMult",params:get("rateMult")*-1)
+  end
 end
 
 encs={"db","rateMult","timescalein"}

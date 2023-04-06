@@ -118,9 +118,9 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper1",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,timescale=3;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescale=20;
 			var sndl,sndr;
-			var snd=XPlayBuf.ar(1,buf,loop:1,trigger:Impulse.kr(0),startPos:BufDur.ir(buf)*Rand(0,1),fadeTime:3);
+			var snd=PlayBuf.ar(1,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
 			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var amp=LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
@@ -142,12 +142,12 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper2",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,timescale=20;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescale=20;
 			var sndl,sndr;
-			var snd=XPlayBuf.ar(2,buf,loop:1,trigger:Impulse.kr(0),startPos:BufDur.ir(buf)*Rand(0,1),fadeTime:3);
+			var snd=PlayBuf.ar(2,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
 			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
-			var amp=LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
+			var amp=(db.dbamp)*LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
 			var pan=lr*0.5;
 			snd=HPF.ar(snd,LinLin.kr(fb,-1,1,20,1000));
 			sndl=snd[0];
@@ -201,7 +201,7 @@ Engine_Forestscapes1 : CroneEngine {
 		"done loading.".postln;
 
         this.addCommand("sound_delta","sf",{ arg msg;
-	    var folder=msg[1].asString;
+		    var folder=msg[1].asString;
             var num=msg[2].abs;
             if (msg[2]>0,{
                 this.playFolder(folder,num);
@@ -210,6 +210,15 @@ Engine_Forestscapes1 : CroneEngine {
                 this.remove(num);
             });
         });
+
+
+		this.addCommand("setp","sf",{ arg msg;
+			syns.keysValuesDo({ arg k, syn;
+				if (syn.isRunning,{
+					syn.set(msg[1].asString,msg[2]);
+				});
+			});
+		});
     }
 
 

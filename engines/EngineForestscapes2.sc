@@ -183,13 +183,13 @@ Engine_Forestscapes2 : CroneEngine {
         	this.playTape(msg[1],msg[2],msg[3],msg[4],msg[5]);
         });
 
-	this.addCommand("setp","sf",{ arg msg;
+		this.addCommand("setp","sf",{ arg msg;
 			syns.keysValuesDo({ arg k, syn;
 				if (syn.isRunning,{
 					syn.set(msg[1].asString,msg[2]);
 				});
 			});
-	});
+		});
     }
 
 

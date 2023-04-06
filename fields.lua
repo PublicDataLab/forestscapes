@@ -5,12 +5,33 @@
 -- pseudo-ambisonics of
 -- field recordings.
 --
+--    ▼ instructions below ▼
+--
+-- K3/K2 adds/removes sound
+-- E1 changes volume
+-- E2 changes rate
+-- E3 changes timescale
 
 tree_=include("lib/tree")
 engine.name="Forestscapes1"
 player={}
 
+reverb_settings_saved={}
+reverb_settings={
+  reverb=2,
+  rev_eng_input=0,
+  rev_return_level=0,
+  rev_low_time=9,
+  rev_mid_time=6,
+}
 function init()
+  --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
+  
+  for k,v in pairs(reverb_settings) do
+    reverb_settings_saved[k]=params:get(k)
+    params:set(k,v)
+  end
+
   print("starting")
 
   params:set("reverb",2)
@@ -62,25 +83,23 @@ function init()
     end
   end
 
-  -- local params_menu={
-  -- }
-  -- for i=1,4 do
-  --     table.insert(params_menu,{id="mod"..i,name="mod"..i,modi=i,min=-1,max=1,exp=false,div=0.1,default=0,unit="db"})
-  -- end
-  -- for _,pram in ipairs(params_menu) do
-  --     params:add{
-  --         type="control",
-  --         id=pram.id,
-  --         name=pram.name,
-  --         controlspec=controlspec.new(pram.min,pram.max,pram.exp and "exp" or "lin",pram.div,pram.default,pram.unit or "",pram.div/(pram.max-pram.min)),
-  --         formatter=pram.formatter,
-  --     }
-  --     params:set_action(pram.id,function(x)
-  --         if pram.modi~=nil then
-  --             mod[pram.modi]=x
-  --         end
-  --     end)
-  -- end
+  local params_menu={
+    {id="db",name="volume",min=-96,max=12,exp=false,div=0.1,default=-6,unit="db"},
+    {id="rateMult",name="rate",min=-4,max=4,exp=false,div=0.01,default=1},
+    {id="timescale",name="timescale",min=0.1,max=100,exp=true,div=0.5,default=20},
+  }
+  for _,pram in ipairs(params_menu) do
+    params:add{
+      type="control",
+      id=pram.id,
+      name=pram.name,
+      controlspec=controlspec.new(pram.min,pram.max,pram.exp and "exp" or "lin",pram.div,pram.default,pram.unit or "",pram.div/(pram.max-pram.min)),
+      formatter=pram.formatter,
+    }
+    params:set_action(pram.id,function(x)
+      engine.setp(pram.id,x)
+    end)
+  end
 
   clock.run(function()
     while true do
@@ -97,7 +116,16 @@ function key(k,z)
   end
 end
 
+encs={"db","rateMult","timescalein"}
 function enc(k,d)
+  params:delta(encs[k],d)
+end
+
+function cleanup()
+  os.execute("pkill -f oscnotify")
+  for k,v in pairs(reverb_settings_saved) do
+    params:set(k,v)
+  end
 end
 
 b_mod=2
