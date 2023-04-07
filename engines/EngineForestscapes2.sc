@@ -22,6 +22,7 @@ Engine_Forestscapes2 : CroneEngine {
 			("[forestscapes2] error: need to provide filename").postln;
 			^nil
 		});
+		("[forestscapes2] loading"+filename).postln;
 		bufs.put(tapeid,Buffer.read(server,filename,action:{ arg buf;
 			("[forestscapes2] loaded"+tape+filename).postln;
 			syns.keysValuesDo({ arg k, syn;

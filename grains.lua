@@ -12,8 +12,6 @@
 -- E2 changes rate
 -- E3 changes movement speed
 
-
-
 musicutil=require("musicutil")
 tree_=include("lib/tree")
 player_=include("lib/player")
@@ -32,19 +30,17 @@ reverb_settings={
 }
 function init()
   --os.execute(_path.code.."forestscapes/lib/oscnotify/run.sh &")
-  
+
   for k,v in pairs(reverb_settings) do
     reverb_settings_saved[k]=params:get(k)
     params:set(k,v)
   end
-
 
   tree=tree_:new{x=64,y=64,age=math.random(80,100)/100}
   player={}
   for i=1,total_num do
     table.insert(player,player_:new{id=i})
   end
-
 
   params:add_file("fileload","load file",_path.code.."forestscapes/sounds/field")
   params:set_action("fileload",function(x)
@@ -69,9 +65,9 @@ function init()
       formatter=pram.formatter,
     }
     params:set_action(pram.id,function(x)
-	    if pram.id=="rateMult" and math.abs(x)<0.1 then 
-		    x=0.1 * (x>0 and 1 or -1)
-	    end
+      if pram.id=="rateMult" and math.abs(x)<0.1 then
+        x=0.1*(x>0 and 1 or-1)
+      end
       engine.setp(pram.id,x)
     end)
   end
@@ -123,7 +119,7 @@ function init()
 
   clock.run(function()
     clock.sleep(0.2)
-    params:set("fileload","/home/we/dust/code/forestscapes/sounds/field/aporee_11164_13177/RioUrubunightfallforest.ogg")
+    params:set("fileload","/home/we/dust/code/forestscapes/sounds/field/HoscheidKlangwanderwegRhrenglockenreihe.ogg")
     clock.sleep(0.2)
     local rates={1,1,1,0.125/2,0.5,0.5,0.25,2,0.125}
     for i=1,total_num do
@@ -220,7 +216,7 @@ kon={false,false,false}
 
 function key(k,z)
   kon[k]=z==1
-  if z==1 and k==3 then 
+  if z==1 and k==3 then
     -- reverse
     params:set("rateMult",params:get("rateMult")*-1)
   end
