@@ -12,6 +12,8 @@
 -- E2 changes rate
 -- E3 changes movement speed
 
+PATH_TO_SAMPLES=_path.code.."forestscapes/sounds/field/"
+
 tree_=include("lib/tree")
 engine.name="Forestscapes1"
 player={}
@@ -115,12 +117,12 @@ function init()
       redraw()
     end
   end)
-  engine.sound_delta(_path.code.."forestscapes/sounds/field/",2)
+  engine.sound_delta(PATH_TO_SAMPLES,2)
 end
 
 function key(k,z)
   if z==1 and k>1 then
-    engine.sound_delta(_path.code.."forestscapes/sounds/field/",k==2 and-1 or 1)
+    engine.sound_delta(PATH_TO_SAMPLES,k==2 and-1 or 1)
   end
 end
 
