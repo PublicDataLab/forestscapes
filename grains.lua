@@ -103,7 +103,9 @@ function init()
     if string.sub(path,1,1)=="/" then
       path=string.sub(path,2)
     end
-    if osc_fun[path]~=nil then osc_fun[path](args) else
+    if path~=nil and osc_fun[path]~=nil then
+      osc_fun[path](args)
+    else
       -- print("osc.event: '"..path.."' ?")
     end
   end

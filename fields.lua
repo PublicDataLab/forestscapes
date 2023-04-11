@@ -78,7 +78,9 @@ function init()
     if string.sub(path,1,1)=="/" then
       path=string.sub(path,2)
     end
-    if osc_fun[path]~=nil then osc_fun[path](args) else
+    if path~=nil and osc_fun[path]~=nil then
+      osc_fun[path](args)
+    else
       -- print("osc.event: '"..path.."' ?")
     end
   end
@@ -100,8 +102,8 @@ function init()
       if pram.id=="timescalein" then
         x=x*0.05
       end
-      if pram.id=="rateMult" and math.abs(x)<0.1 then 
-	      x=0.1 * (x>0 and 1 or -1)
+      if pram.id=="rateMult" and math.abs(x)<0.1 then
+        x=0.1*(x>0 and 1 or-1)
       end
       engine.setp(pram.id,x)
     end)
@@ -159,7 +161,6 @@ function redraw()
   end
   screen.update()
 end
-
 
 function distance(p1,p2)
   local dx=p1.x-p2.x
