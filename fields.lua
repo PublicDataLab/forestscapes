@@ -35,8 +35,8 @@ function init()
   print("starting")
 
   params:set("reverb",2)
-  params:set("rev_eng_input",0)
-  params:set("rev_return_level",0)
+  params:set("rev_eng_input",-6)
+  params:set("rev_return_level",-6)
   params:set("rev_low_time",9)
   params:set("rev_mid_time",6)
   tree=tree_:new{x=120,y=64,age=math.random(70,100)/100}
@@ -146,10 +146,10 @@ function redraw()
 
   local points={}
   for k,v in pairs(player) do
-    x=util.linlin(-1,1,0,128,v.lr)
-    y=util.linlin(-1,1,0,64,v.fb)
     r=util.linlin(0,1,3,16,v.amp)
-    l=util.linlin(0,1,10,1,v.amp)
+    x=util.linlin(-1,1,r,128-r,v.lr)
+    y=util.linlin(-1,1,r,64-r,v.fb)
+    l=util.linlin(-12,0,10,1,20*math.log10(v.amp))
     table.insert(points,{x=x,y=y,r=r,used=false,l=util.round(l),on=v.on})
   end
   for _,point in ipairs(points) do

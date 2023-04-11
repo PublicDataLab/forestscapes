@@ -122,10 +122,10 @@ Engine_Forestscapes1 : CroneEngine {
 			var sndl,sndr;
 			var timescale = 1.0 / timescalein; 
 			var snd=PlayBuf.ar(1,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
-			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
+			var lr=(0.8*LFNoise2.kr(1/timescale))+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
-			var amp=LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
-			var pan=lr*0.5;
+			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,9.neg,0)).dbamp;
+			var pan=lr*0.4;
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
@@ -151,10 +151,10 @@ Engine_Forestscapes1 : CroneEngine {
 			var sndl,sndr;
 			var timescale = 1.0 / timescalein; 
 			var snd=PlayBuf.ar(2,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
-			var lr=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
+			var lr=(0.8*LFNoise2.kr(1/timescale))+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
-			var amp=(db.dbamp)*LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.neg,1,0,1)*(Rand(12.neg,0).dbamp);
-			var pan=lr*0.5;
+			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,9.neg,0)).dbamp;
+			var pan=lr*0.4;
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
