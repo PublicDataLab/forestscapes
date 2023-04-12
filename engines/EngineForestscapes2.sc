@@ -85,7 +85,7 @@ Engine_Forestscapes2 : CroneEngine {
 			// LFO for the volume <-- tinker
 			var lfoAmp=SinOsc.kr(timescale/Rand(10,30),Rand(hi:2*pi)).range(0.25,0.5);
 			// LFO for the panning <-- tinker
-			var lfoPan=SinOsc.kr(timescale/Rand(10,30),Rand(hi:2*pi)).range(-1,1);
+			var lfoPan=SinOsc.kr(timescale/Rand(10,30),Rand(hi:2*pi)).range(0.4.neg,0.4);
 
 			// calculate the final rate
 			var rate=Lag.kr(lfoRate*(2*lfoForward-1),1)*BufRateScale.kr(buf);

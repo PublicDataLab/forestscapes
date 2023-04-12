@@ -125,7 +125,7 @@ Engine_Forestscapes1 : CroneEngine {
 			var lr=(0.8*LFNoise2.kr(1/timescale))+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,9.neg,0)).dbamp;
-			var pan=lr*0.4;
+			var pan=lr*0.25;
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
@@ -154,7 +154,7 @@ Engine_Forestscapes1 : CroneEngine {
 			var lr=(0.8*LFNoise2.kr(1/timescale))+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
 			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,9.neg,0)).dbamp;
-			var pan=lr*0.4;
+			var pan=lr*0.25;
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
