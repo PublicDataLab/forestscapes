@@ -138,12 +138,12 @@ Engine_Forestscapes1 : CroneEngine {
 			sndl=SelectX.ar(((lr>0.1)*lr.abs),[sndl,DelayN.ar(sndl,0.03,Rand(0.0,0.03))]);
 			sndr=SelectX.ar(((lr<0.1.neg)*lr.abs),[sndr,DelayN.ar(sndr,0.03,Rand(0.0,0.03))]);
 			snd=Balance2.ar(sndl,sndr,pan,amp)*Line.kr(0,1,1);
-			amp = amp * EnvGen.ar(Env.adsr(1.1,1,1,1.1,curve:[4,4]),gate,doneAction:2);
+			amp = amp * EnvGen.ar(Env.adsr(5,1,1,5,curve:[4,4]),gate,doneAction:2);
 			snd=snd*amp;
 			SendReply.kr(Impulse.kr(10),"/position",[buf,lr,fb,amp]);
 			Out.ar(busCompress,(fb+1)/2*snd);
 			Out.ar(busNoCompress,(1-((fb+1)/2))*snd);
-			Out.ar(busReverb,LinExp.kr(fb,1,-1,0.01,0.19)*snd);
+			Out.ar(busReverb,LinExp.kr(fb,1,-1,0.01,0.1)*snd);
 		}).add;
 
 		SynthDef("looper2",{
@@ -167,12 +167,12 @@ Engine_Forestscapes1 : CroneEngine {
 			sndl=SelectX.ar(((lr>0.1)*lr.abs),[sndl,DelayN.ar(sndl,0.03,Rand(0.0,0.03))]);
 			sndr=SelectX.ar(((lr<0.1.neg)*lr.abs),[sndr,DelayN.ar(sndr,0.03,Rand(0.0,0.03))]);
 			snd=Balance2.ar(sndl,sndr,pan,amp)*Line.kr(0,1,1);
-			amp = amp * EnvGen.ar(Env.adsr(1.1,1,1,1.1,curve:[4,4]),gate,doneAction:2);
+			amp = amp * EnvGen.ar(Env.adsr(5,1,1,5,curve:[4,4]),gate,doneAction:2);
 			snd=snd*amp;
 			SendReply.kr(Impulse.kr(10),"/position",[buf,lr,fb,amp]);
 			Out.ar(busCompress,(fb+1)/2*snd);
 			Out.ar(busNoCompress,(1-((fb+1)/2))*snd);
-			Out.ar(busReverb,LinExp.kr(fb,1,-1,0.01,0.19)*snd);
+			Out.ar(busReverb,LinExp.kr(fb,1,-1,0.01,0.1)*snd);
 		}).add;
 
 
