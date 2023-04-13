@@ -78,7 +78,7 @@ Engine_Forestscapes1 : CroneEngine {
                 bufs.put(fname,Buffer.read(server,fname,0,-1,action:{
                     "loooping audio file".postln;
 		NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,1);
-                    syns.put(fname,Synth.before(syns.at("fx"),"looper2",[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
+                    syns.put(fname,Synth.before(syns.at("fx"),"looper"++bufs.at(fname).numChannels,[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
 			NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,0);
 
 		    }));
@@ -88,7 +88,7 @@ Engine_Forestscapes1 : CroneEngine {
                 // only allow one sample of one kind to play at once
                 this.stop(fname);
 		NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,1);
-                syns.put(fname,Synth.before(syns.at("fx"),"looper2",[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
+                syns.put(fname,Synth.before(syns.at("fx"),"looper"++bufs.at(fname).numChannels,[\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
 			NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,0);
 
 		}));
@@ -129,7 +129,7 @@ Engine_Forestscapes1 : CroneEngine {
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
-			pan = Clip.kr(-1,1);
+			pan = Clip.kr(pan,-1,1);
 			snd=HPF.ar(snd,LinLin.kr(fb,-1,1,20,1000));
 			sndl=snd;
 			sndr=snd;
@@ -158,7 +158,7 @@ Engine_Forestscapes1 : CroneEngine {
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
-			pan = Clip.kr(-1,1);
+			pan = Clip.kr(pan,-1,1);
 			snd=HPF.ar(snd,LinLin.kr(fb,-1,1,20,1000));
 			sndl=snd[0];
 			sndr=snd[1];
