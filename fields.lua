@@ -36,7 +36,7 @@ function init()
 
   print("starting")
 
-  params:set("reverb",2)
+  params:set("reverb",1)
   params:set("rev_eng_input",-6)
   params:set("rev_return_level",-6)
   params:set("rev_low_time",9)
