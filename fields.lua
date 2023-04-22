@@ -94,6 +94,8 @@ function init()
     {id="randomselection",name="selection",min=0,max=1,exp=false,div=1,default=1,action=function(x) engine.ordered(x) end,formatter=function(param) return param:get()==1 and "random" or "ordered" end},
     {id="fadein",name="fadein",min=0.1,max=30,exp=false,div=0.5,default=5,unit="s",action=function(x) engine.fadein(x) end},
     {id="fadeout",name="fadeout",min=0.1,max=30,exp=false,div=0.5,default=5,unit="s",action=function(x) engine.fadeout(x) end},
+    {id="ampRange",name="amp range",min=-64,max=0,exp=false,div=1,default=-9,unit="dB",action=function(x) engine.ampRange(x) end},
+    {id="panRange",name="pan range",min=0.0,max=1,exp=false,div=0.01,default=0.25,unit="",action=function(x) engine.panRange(x) end},
   }
   for _,pram in ipairs(params_menu) do
     params:add{

@@ -13,6 +13,8 @@ Engine_Forestscapes1 : CroneEngine {
 	var playi;
 	var fadein;
 	var fadeout;
+	var panRange;
+	var ampRange;
 	var randomSelection;
     // Forestscapes1 ^
 
@@ -96,7 +98,7 @@ Engine_Forestscapes1 : CroneEngine {
                 bufs.put(fname,Buffer.read(server,fname,0,-1,action:{
                     "loooping audio file".postln;
 		NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,1);
-                    syns.put(fname,Synth.before(syns.at("fx"),"looper"++bufs.at(fname).numChannels,[\fadein,fadein,\fadeout,fadeout,\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
+                    syns.put(fname,Synth.before(syns.at("fx"),"looper"++bufs.at(fname).numChannels,[\ampRange,ampRange,\panRange,panRange,\fadein,fadein,\fadeout,fadeout,\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
 			NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,0);
 
 		    }));
@@ -106,7 +108,7 @@ Engine_Forestscapes1 : CroneEngine {
                 // only allow one sample of one kind to play at once
                 this.stop(fname);
 		NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,1);
-                syns.put(fname,Synth.before(syns.at("fx"),"looper"++bufs.at(fname).numChannels,[\fadein,fadein,\fadeout,fadeout,\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
+                syns.put(fname,Synth.before(syns.at("fx"),"looper"++bufs.at(fname).numChannels,[\ampRange,ampRange,\panRange,panRange,\fadein,fadein,\fadeout,fadeout,\buf,bufs.at(fname),\busReverb,buses.at("busReverb"),\busNoCompress,buses.at("busNoCompress"),\busCompress,buses.at("busCompress")]).onFree({
 			NetAddr("127.0.0.1", 10111).sendMsg("on",bufs.at(fname).bufnum,0);
 
 		}));
@@ -125,6 +127,8 @@ Engine_Forestscapes1 : CroneEngine {
 		randomSelection = 1;
 		fadein=5.0;
 		fadeout=5.0;
+		ampRange=9.neg;
+		panRange=0.25;
 
 		// basic players
 		SynthDef("fx",{
@@ -142,14 +146,14 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper1",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescalein=0.05,fadein=5,fadeout=5;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescalein=0.05,fadein=5,fadeout=5,panRange=0.25,ampRange=9.neg;
 			var sndl,sndr;
 			var timescale = 1.0 / timescalein; 
 			var snd=PlayBuf.ar(1,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
 			var lr=(0.8*LFNoise2.kr(1/timescale))+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
-			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,9.neg,0)).dbamp;
-			var pan=lr*0.25;
+			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,ampRange,0)).dbamp;
+			var pan=lr*panRange;
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
@@ -171,14 +175,14 @@ Engine_Forestscapes1 : CroneEngine {
 		}).add;
 
 		SynthDef("looper2",{
-			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescalein=0.05,fadein=5,fadeout=5;
+			arg buf,busReverb,busCompress,busNoCompress,gate=1,rateMult=1.0,db=0.0,timescalein=0.05,fadein=5,fadeout=5,panRange=0.25,ampRange=9.neg;
 			var sndl,sndr;
 			var timescale = 1.0 / timescalein; 
 			var snd=PlayBuf.ar(2,buf,rate:rateMult*BufRateScale.kr(buf),loop:1,trigger:Impulse.kr(0),startPos:BufFrames.ir(buf)*Rand(0,1));
 			var lr=(0.8*LFNoise2.kr(1/timescale))+(0.1*LFNoise2.kr(10/timescale));
 			var fb=LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale));
-			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,9.neg,0)).dbamp;
-			var pan=lr*0.25;
+			var amp=(db+LinLin.kr(LFNoise2.kr(1/timescale)+(0.1*LFNoise2.kr(10/timescale)),1.1.neg,1.1,ampRange,0)).dbamp;
+			var pan=lr*panRange;
 			lr = Clip.kr(lr,-1,1);
 			fb = Clip.kr(fb,-1,1);
 			amp = Clip.kr(amp,-64,12);
@@ -245,6 +249,22 @@ Engine_Forestscapes1 : CroneEngine {
             });
         });
 
+		this.addCommand("ampRange","f",{ arg msg;
+			ampRange = msg[1];
+			syns.keysValuesDo({ arg k, syn;
+				if (syn.isRunning,{
+					syn.set(\ampRange,msg[1]);
+				});
+			});
+		});
+		this.addCommand("panRange","f",{ arg msg;
+			panRange = msg[1];
+			syns.keysValuesDo({ arg k, syn;
+				if (syn.isRunning,{
+					syn.set(\panRange,msg[1]);
+				});
+			});
+		});
 		this.addCommand("ordered","i",{ arg msg;
 			randomSelection = msg[1];
 		});
@@ -255,7 +275,7 @@ Engine_Forestscapes1 : CroneEngine {
 			fadeout=msg[1];
 			syns.keysValuesDo({ arg k, syn;
 				if (syn.isRunning,{
-					syn.set(fadeout,msg[1]);
+					syn.set(\fadeout,msg[1]);
 				});
 			});
 		});
