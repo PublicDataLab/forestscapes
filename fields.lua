@@ -92,6 +92,8 @@ function init()
     {id="rateMult",name="rate",min=-4,max=4,exp=false,div=0.01,default=1},
     {id="timescalein",name="speed",min=0.1,max=10,exp=true,div=0.1,default=1},
     {id="randomselection",name="selection",min=0,max=1,exp=false,div=1,default=1,action=function(x) engine.ordered(x) end,formatter=function(param) return param:get()==1 and "random" or "ordered" end},
+    {id="fadein",name="fadein",min=0.1,max=30,exp=false,div=0.5,default=5,unit="s",action=function(x) engine.fadein(x) end},
+    {id="fadeout",name="fadeout",min=0.1,max=30,exp=false,div=0.5,default=5,unit="s",action=function(x) engine.fadeout(x) end},
   }
   for _,pram in ipairs(params_menu) do
     params:add{
