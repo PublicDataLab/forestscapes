@@ -10,6 +10,8 @@ Engine_Forestscapes1 : CroneEngine {
 	var syns;
 	var synlist;
 	var oscs;
+	var playi;
+	var randomSelection;
     // Forestscapes1 ^
 
     *new { arg context, doneCallback;
@@ -32,13 +34,26 @@ Engine_Forestscapes1 : CroneEngine {
 				audioFiles=audioFiles.add(file.fullPath);
 			});
 		});
-		("loaded"+audioFiles.size+"files from"+folder).postln;
-		audioFiles.scramble.do({ arg v,i;
-			if (i<num,{
-				[i,v].postln;
-				this.play(v);
+		("[playFolder] loaded"+audioFiles.size+"files from"+folder).postln;
+		if (randomSelection>0,{
+			("[playFolder] playing random").postln;
+			// random selection
+			audioFiles.scramble.do({ arg v,i;
+				if (i<num,{
+					[i,v].postln;
+					this.play(v);
+				});
+			})
+		},{
+			("[playFolder] playing ordered").postln;
+			num.do({
+				if (playi>=audioFiles.size,{
+					playi=0;
+				});
+				this.play(audioFiles[playi]);
+				playi = playi+1;
 			});
-		})
+		});
 	}
 
 	remove {
@@ -74,6 +89,7 @@ Engine_Forestscapes1 : CroneEngine {
 	play {
 		arg fname;
         if (synlist.size<10,{
+			["[play] playing ",fname].postln;
             if (bufs.at(fname).isNil,{
                 bufs.put(fname,Buffer.read(server,fname,0,-1,action:{
                     "loooping audio file".postln;
@@ -101,6 +117,10 @@ Engine_Forestscapes1 : CroneEngine {
     alloc {
         // Forestscapes1 specific v0.0.1
         var server = context.server;
+
+
+		playi = 0;
+		randomSelection = 1;
 
 		// basic players
 		SynthDef("fx",{
@@ -221,6 +241,9 @@ Engine_Forestscapes1 : CroneEngine {
             });
         });
 
+		this.addCommand("ordered","i",{ arg msg;
+			randomSelection = msg[1];
+		});
 
 		this.addCommand("setp","sf",{ arg msg;
 			syns.keysValuesDo({ arg k, syn;
